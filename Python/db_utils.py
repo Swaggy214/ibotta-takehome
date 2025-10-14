@@ -19,8 +19,8 @@ def create_connection(db_file):
     return conn
 
 # PLEASE DESCRIBE -
-# This function runs a basic sql query using an established database connection
-# The SQL query returns all rows fetched, basically a Select *
+# This function runs a sql query using an established database connection
+# The SQL query returns all rows fetched
 def db_query(conn, query):
     cur = conn.cursor()
     cur.execute(query)
