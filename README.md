@@ -44,33 +44,33 @@
 
 4. Run the ETL pipeline
 
-#### Running from the play button
-line 9:
-```conn = create_connection("../Database/ibotta.db")```
-
-line 14:
-```csv_folder = Path("../CSV_data")```
-
-
-#### Running from the terminal
-line 9:
-```conn = create_connection("./Database/ibotta.db")```
-
-line 14:
-```csv_folder = Path("./CSV_data")```
-
-Then run:
-```bash
-   python Python/main.py
-```
+    #### Running from the play button
+    line 9:
+    ```conn = create_connection("../Database/ibotta.db")```
+    
+    line 14:
+    ```csv_folder = Path("../CSV_data")```
+    
+    
+    #### Running from the terminal
+    line 9:
+    ```conn = create_connection("./Database/ibotta.db")```
+    
+    line 14:
+    ```csv_folder = Path("./CSV_data")```
+    
+    Then run:
+    ```bash
+       python Python/main.py
+    ```
    
-   Expected output:
-```
-   Loading CSV_data/offer_rewards_168083.csv into offer_rewards...
-   Loading CSV_data/customer_offers_296332.csv into customer_offers...
-   ...
-   All tables have been loaded!
-```
+       Expected output:
+    ```
+       Loading CSV_data/offer_rewards_168083.csv into offer_rewards...
+       Loading CSV_data/customer_offers_296332.csv into customer_offers...
+       ...
+       All tables have been loaded!
+    ```
 
 5. Verify the database
    The SQLite database will be created at `Database/ibotta.db`
