@@ -116,7 +116,7 @@ This query applies a 2-month filter on the activated column.
 This would be appropriate if the dataset included more recent dates. 
 This query returns customers who haven't activated an offer in the last 2 months, or ever, which happens to be all of them
 ```
-select customer_id, activated
+select customer_id
 from customer_offers
 group by customer_id
 having max(date(activated)) < date('now', '-2 months')
@@ -138,12 +138,11 @@ group by customer_id
 #### QUERY 4
 
 ```
-select
-    customer_offer_id,
-    sum(verified_redemption_count) * offer_amount as total_redemption_amount
-from customer_offer_redemptions
-group by customer_offer_id
-order by total_redemption_amount
+select b.customer_id, sum(verified_redemption_count) as total_redemptions
+from customer_offer_redemptions a
+inner join customer_offers b
+    on a.customer_offer_id = b.id
+group by b.customer_id
 ```
 
 
@@ -184,7 +183,7 @@ Multiplying by 1.0 ensured the result was a floating-point decimal rather than a
 Using NULLIF was essential because empty strings in the database were being interpreted as valid values, which could have skewed the conversion rate.
 
 #### Query 4: Total redemption amount per customer
-Initially, I interpreted the question as calculating the total value of redeemed offers (`offer_amount`) per customer.
-I considered joining `customer_offer_redemptions` with `customer_offers` to link redemptions to customers.
-However, there was no column in `customer_offer_redemptions` that could be linked to another table.
-As a result, the aggregation was limited to calculating `verified_redemption_count` * `offer_amount` for each row, without attribution to a specific customer.
+For this query, I needed to calculate the total number of offer redemptions per customer.
+To do this, I joined the `customer_offer_redemptions` table to the `customer_offers` table using the `customer_offer_id` field, which links each redemption record to a specific customer.
+After establishing that relationship, I used a `SUM` aggregation on the `verified_redemption_count` column and grouped the results by `customer_id`.
+This produces the total number of verified redemptions attributed to each customer.
