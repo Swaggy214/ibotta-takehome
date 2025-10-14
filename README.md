@@ -129,57 +129,45 @@ group by customer_id
 
 
 
-## My thought process
-Part 1:
-My first steps were to set up a new GitHub repo, as I figured it would be easiest to work in
-I then went over the existing code that was given to me to figure out what gaps I need to fill, and what I will need to write myself.
-This is where I added the descriptions to the existing code.
+## Project thought process
+### Part 1:
+My first step was to set up a new GitHub repository to manage the project efficiently. 
+I then reviewed the existing Python code provided to identify gaps and determine which functions I could use versus what I needed to implement myself. 
+This is where I added descriptive comments to the existing functions for clarity.
 
-Using the functions in db_utils, I called them in the main.py to accurately populate the tables
+Using the utility functions in db_utils.py, I called them from main.py to accurately populate all four tables in the SQLite database:
 
-Part 2:
-Time to query the tables. I had 4 questions to answer.
-The first thing I did was set up a query console, and verify I could query all 4 tables.
-After doing that, I examined each table to get a firm idea of all the columns and what each table represented.
-Lastly, I made sure another user would be able to query within the terminal, if an IDE wasn't accessible to them
+  - offer_rewards
+  - customer_offers
+  - customer_offer_rewards
+  - customer_offer_redemptions
 
-Query 1 thought process:
-I need to gather counts of distinct members who have a timestamp in the "activated" column
-The way I do this is select the column I care about, and an aggregate count(*). This requires a group by.
-When I group by customer_id, it makes sure I am only looking at distinct IDs.
-To make sure I wasn't including null values in these counts, I had to add an exclusion clause. 
-Since they aren't true nulls, I had to do where activated != '' instead of not null
+### Part 2:
+The next phase was analyzing the data to answer the four questions provided. 
+I first set up a query console to verify I could access all four tables. 
+Then, I examined each table to understand its columns and relationships. 
+Finally, I ensured that another user could query the database from the terminal, in case an IDE was not available.
 
--- Query 1
-select customer_id, count(*)
-from customer_offers
-where activated != ''
-group by customer_id
+#### Query 1: Total counts of offer activations per customer
+I needed to count distinct customers with a timestamp in the `activated` column.
+I selected `customer_id` and used `count(*)` with `group by customer_id`.
+To exclude blank values, I added a `where activated != ''` clause, since empty strings are not considered SQL NULL.
 
-Query 2 thought process:
-Similar to query 1, I am querying the customer_offers table
-First, I interpret a couple of months as 2 months, or 60 days.
-Second, I check max(activated), and quickly see that the most recent is `2021-03-25 00:01:04.000` and min is `2021-03-18 01:11:14.000`
-This means the window of available data is only in a week window?
+#### Query 2: Customers who haven't activated on an offer in last couple months
+Similar to query 1, I am querying the `customer_offers` table
+First, I interpreted a couple of months as approximately 60 days.
+Second, I examined the `activated` column, and noticed the available data only covers a small window
+`2021-03-18 01:11:14.000` to `2021-03-25 00:01:04.000`
+This is the only available timeframe to actually query this information
 
-Query 3 thought process:
-This one continues to build off the last two, and utilizes customer_offers again
-Since I am looking for a rate, I will need to do a little math. I will divide the total filled verified columns by activated per customer_id
-Multiplying this by 1.0 will get me a floating integer, or rate of completion per customer as a decimal
-Here, I adding a `nullif` aggregate was essential, since SQL was still perceiving empty columns as having data in it.
+#### Query 3: Conversion rate of activated to completed offers per customer
+This query built on the previous analysis, using the `customer_offers` table.
+I calculated the conversion rate by dividing the total number of filled verified timestamps by the total number of activated timestamps per customer.
+Multiplying by 1.0 ensured the result was a floating-point decimal rather than an integer.
+Using NULLIF was essential because empty strings in the database were being interpreted as valid values, which could have skewed the conversion rate.
 
---Query 3
-select customer_id, count(nullif(activated, '')), count(nullif(verified, '')),
-       ROUND(
-       count(nullif(verified, '')) * 1.0 / nullif(count(nullif(activated, '')), 0),
-        2
-       ) as conversion_rate
-from customer_offers
-group by customer_id
-
-Query 4 thought process:
-This one was a little weird. At first I had a hard time interpreting the question.
-Then I figured it must mean, how much money (offer_amount) as each customer redeemed?
-To do this, I would have to link two tables (customer_offer_redemptions) and then another one like customer_offers to get this.
-However, there is no way to link customer_offer_redemptions to any other table! 
-There are also no more than 1 row per id, or customer_offer_id. So this aggregation is more of just verified_redemption_count * offer_amount for each row
+#### Query 4: Total redemption amount per customer
+Initially, I interpreted the question as calculating the total value of redeemed offers (`offer_amount`) per customer.
+I considered joining `customer_offer_redemptions` with `customer_offers` to link redemptions to customers.
+However, there was no column in `customer_offer_redemptions` that could be linked to another table.
+As a result, the aggregation was limited to calculating `verified_redemption_count` * `offer_amount` for each row, without attribution to a specific customer.
