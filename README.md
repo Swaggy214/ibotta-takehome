@@ -44,19 +44,19 @@
 
 4. Run the ETL pipeline
 
-## Running from the play button
-# line 9
+# Running from the play button
+line 9
 conn = create_connection("../Database/ibotta.db")
 
-# line 14
+line 14
 csv_folder = Path("../CSV_data")
 
 
-## Running from the terminal
-# line 9
+#Running from the terminal
+line 9
 conn = create_connection("./Database/ibotta.db")
 
-# line 14
+line 14
 csv_folder = Path("./CSV_data")
 
 Then run:
