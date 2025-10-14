@@ -112,6 +112,22 @@ group by customer_id
 ```
 
 #### QUERY 2
+1. The first query returns all customers with an activated offer that has not yet been verified, regardless of when the activation occurred:
+```
+select customer_id
+from customer_offers
+where activated != ''
+and verified = ''
+```
+2. The second query applies a 2-month filter on the activated column. 
+This would be appropriate if the dataset included more recent dates, and it returns only customers who activated an offer in the last 2 months but have not yet verified it:
+```
+select customer_id
+from customer_offers
+where activated != ''
+and verified = ''
+and date(activated) >= date('now', '-2 months')
+```
 
 #### QUERY 3
 

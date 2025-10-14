@@ -34,6 +34,6 @@ def main():
     conn.close()
     print("All tables have been loaded!")
 
-#run main
+# run main
 if __name__ == '__main__':
     main()
