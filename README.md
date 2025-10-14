@@ -8,13 +8,13 @@
 
 ### Installation & Setup
 
-1. **Clone the repository**
+1. Clone the repository
 ```bash
    git clone https://github.com/Swaggy214/ibotta-takehome.git
    cd ibotta-takehome
 ```
 
-2. **Verify project structure**
+2. Verify project structure
    Ensure your directory looks like this:
 ```
     ibotta-takehome/
@@ -36,13 +36,13 @@
     └── README.md    
 ```
 
-3. **(Optional) Create virtual environment**
+3. (Optional) Create virtual environment
 ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-4. **Run the ETL pipeline**
+4. Run the ETL pipeline
 
 ## Running from the play button
 # line 9
@@ -72,15 +72,59 @@ Then run:
    All tables have been loaded!
 ```
 
-5. **Verify the database**
+5. Verify the database
    The SQLite database will be created at `Database/ibotta.db`
 ```bash
    sqlite3 Database/ibotta.db "SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
-### Running SQL Queries
-[Include your query instructions here]
 
+### Running SQL Queries
+You can run SQL queries on the populated ibotta.db database in one of two ways:
+
+## Option 1 Using your IDE (e.g., PyCharm, VSCode)
+
+1. Open the Database tool window
+
+2. Click + → Data Source → SQLite.
+
+3. Select the database file: database/ibotta.db.
+
+4. Open a SQL Console and run queries directly
+
+
+## Option 2: Using the provided Python query script
+
+1. Open Python/query.py in your editor.
+
+2. Modify line 8 with the query you want
+
+3. Run the script in the terminal from the project root
+
+## SQL Queries to Run:
+
+# QUERY 1
+select customer_id, count(*)
+from customer_offers
+where activated != ''
+group by customer_id
+
+# QUERY 2
+
+# QUERY 3
+select customer_id, count(nullif(activated, '')), count(nullif(verified, '')),
+       round(
+       count(nullif(verified, '')) * 1.0 / nullif(count(nullif(activated, '')), 0),
+        2
+       ) as conversion_rate
+from customer_offers
+group by customer_id
+
+# QUERY 4
+
+
+
+### MY THOUGHT PROCESS
 Part 1:
 My first steps were to set up a new GitHub repo, as I figured it would be easiest to work in
 I then went over the existing code that was given to me to figure out what gaps I need to fill, and what I will need to write myself.
@@ -89,9 +133,10 @@ This is where I added the descriptions to the existing code.
 Using the functions in db_utils, I called them in the main.py to accurately populate the tables
 
 Part 2:
-Time to query the tables. I had 4 questions to answer
-The first thing I did was set up a query console, and verify I could query all 4 tables
-After doing that, I examined each table to get a firm idea of all the columns and what each table represented
+Time to query the tables. I had 4 questions to answer.
+The first thing I did was set up a query console, and verify I could query all 4 tables.
+After doing that, I examined each table to get a firm idea of all the columns and what each table represented.
+Lastly, I made sure another user would be able to query within the terminal, if an IDE wasn't accessible to them
 
 Query 1 thought process:
 I need to gather counts of distinct members who have a timestamp in the "activated" column
