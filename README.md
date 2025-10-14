@@ -154,11 +154,11 @@ I selected `customer_id` and used `count(*)` with `group by customer_id`.
 To exclude blank values, I added a `where activated != ''` clause, since empty strings are not considered SQL NULL.
 
 #### Query 2: Customers who haven't activated on an offer in last couple months
-Similar to query 1, I am querying the `customer_offers` table
+Similar to query 1, I am querying the `customer_offers` table.
 First, I interpreted a couple of months as approximately 60 days.
-Second, I examined the `activated` column, and noticed the available data only covers a small window
-`2021-03-18 01:11:14.000` to `2021-03-25 00:01:04.000`
-This is the only available timeframe to actually query this information
+Second, I examined the `activated` column, and noticed the available data only covers a small window,
+`2021-03-18 01:11:14.000` to `2021-03-25 00:01:04.000`.
+This is the only available timeframe to actually query this information.
 
 #### Query 3: Conversion rate of activated to completed offers per customer
 This query built on the previous analysis, using the `customer_offers` table.
