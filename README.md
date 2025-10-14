@@ -103,7 +103,7 @@ You can run SQL queries on the populated ibotta.db database in one of two ways:
 
 ## SQL Queries to Run:
 
-### QUERY 1
+#### QUERY 1
 ```
 select customer_id, count(*)
 from customer_offers
@@ -111,9 +111,9 @@ where activated != ''
 group by customer_id
 ```
 
-### QUERY 2
+#### QUERY 2
 
-### QUERY 3
+#### QUERY 3
 
 ```
 select customer_id, count(nullif(activated, '')), count(nullif(verified, '')),
@@ -125,11 +125,11 @@ from customer_offers
 group by customer_id
 ```
 
-### QUERY 4
+#### QUERY 4
 
 
 
-## MY THOUGHT PROCESS
+## My thought process
 Part 1:
 My first steps were to set up a new GitHub repo, as I figured it would be easiest to work in
 I then went over the existing code that was given to me to figure out what gaps I need to fill, and what I will need to write myself.
