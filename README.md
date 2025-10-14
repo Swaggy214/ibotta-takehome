@@ -112,21 +112,15 @@ group by customer_id
 ```
 
 #### QUERY 2
-1. The first query returns all customers with an activated offer that has not yet been verified, regardless of when the activation occurred:
+This query applies a 2-month filter on the activated column. 
+This would be appropriate if the dataset included more recent dates. 
+This query returns customers who haven't activated an offer in the last 2 months, or ever, which happens to be all of them
 ```
-select customer_id
+select customer_id, activated
 from customer_offers
-where activated != ''
-and verified = ''
-```
-2. The second query applies a 2-month filter on the activated column. 
-This would be appropriate if the dataset included more recent dates, and it returns only customers who activated an offer in the last 2 months but have not yet verified it:
-```
-select customer_id
-from customer_offers
-where activated != ''
-and verified = ''
-and date(activated) >= date('now', '-2 months')
+group by customer_id
+having max(date(activated)) < date('now', '-2 months')
+or max(activated) = ''
 ```
 
 #### QUERY 3
@@ -143,6 +137,14 @@ group by customer_id
 
 #### QUERY 4
 
+```
+select
+    customer_offer_id,
+    sum(verified_redemption_count) * offer_amount as total_redemption_amount
+from customer_offer_redemptions
+group by customer_offer_id
+order by total_redemption_amount
+```
 
 
 ## Project thought process
@@ -173,8 +175,7 @@ To exclude blank values, I added a `where activated != ''` clause, since empty s
 Similar to query 1, I am querying the `customer_offers` table.
 First, I interpreted a couple of months as approximately 60 days.
 Second, I examined the `activated` column, and noticed the available data only covers a small window,
-`2021-03-18 01:11:14.000` to `2021-03-25 00:01:04.000`.
-This is the only available timeframe to actually query this information.
+`2021-03-18` to `2021-03-25` which limited the results
 
 #### Query 3: Conversion rate of activated to completed offers per customer
 This query built on the previous analysis, using the `customer_offers` table.
