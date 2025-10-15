@@ -20,7 +20,8 @@ def create_connection(db_file):
 
 # PLEASE DESCRIBE -
 # This function runs a sql query using an established database connection
-# The SQL query returns all rows fetched
+# Then it prints the rows resulting from the query input
+# Lastly, it returns the number of rows returned from the query
 def db_query(conn, query):
     cur = conn.cursor()
     cur.execute(query)
@@ -59,7 +60,7 @@ def loadcsv(conn, file_name, tbl_name):
             row_values.append(datarow[field])
         values.append(row_values)
 
-    #This section is an execution of the insert_sql command we created earlier, and commits the changes
+    # This section is an execution of the insert_sql command we created earlier, and commits the changes
 
     conn.executemany(insert_sql, values)
     conn.commit()
