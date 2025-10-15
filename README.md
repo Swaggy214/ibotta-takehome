@@ -141,11 +141,7 @@ group by customer_id
 Similar to query 1, I am querying the `customer_offers` table.
 First, I interpreted a couple of months as approximately 60 days.
 Second, I examined the `activated` column, and noticed the available data only covers a small window,
-`2021-03-18` to `2021-03-25` which limited the results
-
-#### QUERY 2
-This query applies a 2-month filter on the activated column. 
-This would be appropriate if the dataset included more recent dates. 
+`2021-03-18` to `2021-03-25` which limited the results.
 This query returns customers who haven't activated an offer in the last 2 months, or ever, which happens to be all of them
 
 ```
@@ -163,7 +159,6 @@ I calculated the conversion rate by dividing the total number of filled verified
 Multiplying by 1.0 ensured the result was a floating-point decimal rather than an integer.
 Using NULLIF was essential because empty strings in the database were being interpreted as valid values, which could have skewed the conversion rate.
 
-#### QUERY 3
 
 ```
 select customer_id, 
@@ -181,7 +176,6 @@ To do this, I joined the `customer_offer_redemptions` table to the `customer_off
 After establishing that relationship, I used a `SUM` aggregation on the `verified_redemption_count` column and grouped the results by `customer_id`.
 This produces the total number of verified redemptions attributed to each customer.
 
-#### QUERY 4
 
 ```
 select b.customer_id, sum(verified_redemption_count) as total_redemptions
