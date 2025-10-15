@@ -167,8 +167,6 @@ Using NULLIF was essential because empty strings in the database were being inte
 
 ```
 select customer_id, 
-       count(nullif(activated, '')), 
-       count(nullif(verified, '')),
        round(
        count(nullif(verified, '')) * 1.0 / nullif(count(nullif(activated, '')), 0), 2) 
        as conversion_rate
