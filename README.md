@@ -128,7 +128,6 @@ I needed to count distinct customers with a timestamp in the `activated` column.
 I selected `customer_id` and used `count(*)` with `group by customer_id`.
 To exclude blank values, I added a `where activated != ''` clause, since empty strings are not considered SQL NULL.
 
-#### QUERY 1
 ```
 select customer_id, count(*)
 from customer_offers
